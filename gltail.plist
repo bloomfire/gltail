@@ -3,10 +3,21 @@
 <plist version="1.0">
 <dict>
    <key>Label</key>
-   <string>com.user.loginscript</string>
+   <string>com.user.bubbles</string>
    <key>Program</key>
    <string>/Users/bheeshmar/gltail/restart_bubbles.sh</string>
    <key>RunAtLoad</key>
    <true/>
+   <key>StartCalendarInterval</key>
+   <array>
+      <dict>
+         <key>Hour</key>
+         <integer>0</integer>
+      </dict>
+      <dict>
+         <key>Hour</key>
+         <integer>12</integer>
+      </dict>
+   </array>
 </dict>
 </plist>
