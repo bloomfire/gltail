@@ -1,5 +1,5 @@
-#! /bin/sh
-cd /Users/bheeshmar/gltail/
-git pull -r
+#! /bin/bash --login
 killall ruby
-./bin/gl_tail bloomfire.yaml
+cd /Users/bheeshmar/gltail/ && git pull -r
+source /Users/bheeshmar/gltail/.rvmrc
+cd /Users/bheeshmar/gltail/ && ./bin/gl_tail bloomfire.yaml
