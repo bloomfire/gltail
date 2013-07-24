@@ -46,6 +46,7 @@ class Block
     when 'total' then 1
     when 'average' then 2
     when 'instant' then 4
+    when 'instantd' then 5
     else
       0
     end
@@ -227,7 +228,7 @@ class Block
         i += 1
       end
 
-    elsif @show == 4
+    elsif @show == 4 || @show == 5
       min = @sorted[0].instant
       while i < size
         @sorted[i].update

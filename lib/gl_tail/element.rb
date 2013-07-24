@@ -247,11 +247,9 @@ class Element
         txt = "#{sprintf("%8.2f",@average)} "
       end
     when 4
-      if @instant.kind_of? Fixnum
-        txt = "#{sprintf("%d",@average)} "
-      else
-        txt = "#{sprintf("%8.2f",@instant)} "
-      end
+      txt = "#{sprintf("%8.2f",@instant)} "
+    when 5
+      txt = "#{sprintf("%d",@instant)} "
     else
       raise "unknown block type #{self.inspect}"
     end
