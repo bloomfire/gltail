@@ -45,6 +45,7 @@ class Block
     when 'rate' then 0
     when 'total' then 1
     when 'average' then 2
+    when 'instant' then 4
     else
       0
     end
@@ -226,6 +227,26 @@ class Block
         i += 1
       end
 
+    elsif @show == 4
+      min = @sorted[0].instant
+      while i < size
+        @sorted[i].update
+        instant = @sorted[i].instant
+        if instant > min
+          j = min_pos
+          while @ordered[j-1].instant < instant && j > 0
+            j -= 1
+          end
+          @ordered.insert(j, @sorted[i])
+        else
+          @ordered << @sorted[i]
+          if i < @size
+            min = instant
+          end
+        end
+        min_pos = i
+        i += 1
+      end
     end
 
     @sorted = @ordered

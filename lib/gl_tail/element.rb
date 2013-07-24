@@ -6,7 +6,7 @@
 
 class Element
   attr_accessor :wy, :y, :active, :average_size, :right, :color, :name
-  attr_reader   :rate, :messages, :activities, :queue, :updates, :average, :total
+  attr_reader   :rate, :messages, :activities, :queue, :updates, :average, :total, :instant
 
   def initialize(block, name, color, start_position = nil)
     @block = block
@@ -31,6 +31,7 @@ class Element
     @total = 0
     @sum = 0
     @average = 0.0
+    @instant = 0
     @last_time = 0
     @step = 0, @updates = 0
     @active = false
@@ -53,6 +54,7 @@ class Element
     @total += 1
     @sum += real_size
     @color = color
+    @instant = real_size
 
     if @rate == 0
       @rate = 1.0 / 60
@@ -243,6 +245,12 @@ class Element
         txt = "     avg "
       else
         txt = "#{sprintf("%8.2f",@average)} "
+      end
+    when 4
+      if @instant.kind_of? Fixnum
+        txt = "#{sprintf("%d",@average)} "
+      else
+        txt = "#{sprintf("%8.2f",@instant)} "
       end
     else
       raise "unknown block type #{self.inspect}"
