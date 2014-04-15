@@ -11,14 +11,14 @@ class NginxParser < Parser
     #_, remote_addr, remote_user, request, status, size, referrer, http_user_agent, http_x_forwarded_for = /^([^\s]+) - ([^\s]+) \[.*\] (\d+) \"(.+)\" (\d+) \"(.*)\" \"([^\"]*)\" \"(.*)\"/.match(line).to_a
 
     if request && request != '-'
-      _, referrer_host, referrer_url = /^http[s]?:\/\/([^\/]+)(\/.*)/.match(referrer).to_a if referrer
+      referrer_host = referrer.to_s[/^http[s]?:\/\/([^\/]+)/, 1] || http_x_forwarded_for
       method, full_url, _ = request.split(' ')
       url, parameters = full_url.split('?')
 
       add_activity(:block => 'sites', :name => server.name, :size => size.to_i)
       add_activity(:block => 'urls', :name => url)
       #add_activity(:block => 'users', :name => remote_addr, :size => size.to_i)
-      add_activity(:block => 'referrers', :name => referrer.sub('https://', '').sub('.bloomfire.com','')) unless (referrer_host.nil? || referrer_host.include?(server.name) || referrer_host.include?(server.host) || referrer == '-')
+      add_activity(:block => 'referrers', :name => referrer_host.sub('https://', '').sub('.bloomfire.com','')) unless referrer_host.nil? || referrer_host.include?(server.name) || referrer_host.include?(server.host) || referrer_host == '-'
       #add_activity(:block => 'user agents', :name => http_user_agent, :type => 3) unless http_user_agent.nil?
 
       if( url.include?('.gif') || url.include?('.jpg') || url.include?('.png') || url.include?('.ico'))
