@@ -16,7 +16,7 @@ class NginxParser < Parser
       url, parameters = full_url.split('?')
 
       add_activity(:block => 'sites', :name => server.name, :size => size.to_i)
-      add_activity(:block => 'urls', :name => url)
+      add_activity(:block => 'urls', :name => url) unless url =~ %r{^/uptime\.txt|^/ckeditor/|^/images/|^/assets/}
       #add_activity(:block => 'users', :name => remote_addr, :size => size.to_i)
       add_activity(:block => 'referrers', :name => referrer_host.sub('https://', '').sub('.bloomfire.com','')) unless referrer_host.nil? || referrer_host.include?(server.name) || referrer_host.include?(server.host) || referrer_host == '-'
       #add_activity(:block => 'user agents', :name => http_user_agent, :type => 3) unless http_user_agent.nil?
