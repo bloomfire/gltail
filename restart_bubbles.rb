@@ -2,6 +2,9 @@
 require 'bundler/setup'
 require 'sysops'
 
+# Ruby 1.9's Net::HTTP doesn't have Net::OpenTimeout
+Net::OpenTimeout = Timeout::Error if RUBY_VERSION =~ /^1\.9/
+
 Sysops::Task::SshConfig::Host.class_eval do
 
   alias :old_initialize :initialize
