@@ -2,8 +2,37 @@
 require 'bundler/setup'
 require 'sysops'
 
+###############################################################################################
+
+Kernel.class_eval do
+
+  def in_background(&block)
+    pid_file  = File.expand_path('../../.pid', __FILE__)
+
+    pid = File.read(pid_file).strip.to_i rescue nil
+    if pid
+      begin
+        Process.kill('TERM', pid)
+        sleep 0.1 until (!Process.kill(0, pid) rescue true)
+      rescue Errno::ESRCH
+        warn "WARNING: Process #{pid} is no longer running"
+      end
+      File.unlink(pid_file)
+    end
+
+    pid = fork(&block)
+    Process.detach(pid)
+    File.write(pid_file, pid)
+  end
+
+end
+
+###############################################################################################
+
 # Ruby 1.9's Net::HTTP doesn't have Net::OpenTimeout
 Net::OpenTimeout = Timeout::Error if RUBY_VERSION =~ /^1\.9/
+
+###############################################################################################
 
 Sysops::Task::SshConfig::Host.class_eval do
 
@@ -65,9 +94,14 @@ Sysops::Task::SshConfig::Host.class_eval do
   end
 
 end
+###############################################################################################
 
-Sysops::Task::SshConfig.write('production')
+in_background do
+  Sysops::Task::SshConfig.write('production')
 
-yaml = File.expand_path('../.bloomfire.yaml', __FILE__)
-File.write(yaml, Sysops::Task::SshConfig::Host.bubbles_config.to_yaml)
-exec File.expand_path('../bin/gl_tail', __FILE__), yaml
+  yaml_file = File.expand_path('../.bloomfire.yaml', __FILE__)
+  File.write(yaml_file, Sysops::Task::SshConfig::Host.bubbles_config.to_yaml)
+  exec File.expand_path('../bin/gl_tail', __FILE__), yaml_file
+end
+
+puts "Started bubbles!"

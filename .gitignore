@@ -3,3 +3,4 @@ vendor/Chipmunk-4.1.0/ruby/chipmunk.bundle
 vendor/Chipmunk-4.1.0/ruby/*.o
 
 .bloomfire.yaml
+.pid
