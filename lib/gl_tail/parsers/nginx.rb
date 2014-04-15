@@ -13,7 +13,8 @@ class NginxParser < Parser
     if request && request != '-'
       referrer_host = referrer.to_s[/^http[s]?:\/\/([^\/]+)/, 1] || http_x_forwarded_for
       method, full_url, _ = request.split(' ')
-      url, parameters = full_url.split('?')
+      url, parameters = String(full_url).split('?')
+      url ||= ''
 
       add_activity(:block => 'sites', :name => server.name, :size => size.to_i)
       add_activity(:block => 'urls', :name => url) unless url =~ %r{^/uptime\.txt|^/ckeditor/|^/images/|^/assets/}

@@ -13,11 +13,6 @@ config:
         size: 15
         alignment: -0.99
         blocks:
-            info:
-                order: 0
-                size: 10
-                auto_clean: false
-                show: total
             hosts:
                 order: 1
                 size: 3

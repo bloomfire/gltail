@@ -249,7 +249,7 @@ class Element
     when 4
       txt = "#{sprintf("%8.2f",@instant)} "
     when 5
-      txt = "#{sprintf("%d",@instant)} "
+      txt = "#{sprintf("%8d",@instant)} "
     else
       raise "unknown block type #{self.inspect}"
     end
