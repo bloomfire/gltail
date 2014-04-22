@@ -2,6 +2,8 @@
 require 'bundler/setup'
 require 'sysops'
 
+ENVIRONMENT = ENV['ENVIRONMENT'] || 'production'
+
 ###############################################################################################
 
 Kernel.class_eval do
@@ -39,7 +41,7 @@ Sysops::Task::SshConfig::Host.class_eval do
   alias :old_initialize :initialize
   def initialize(*args)
     old_initialize(*args)
-    self.class.all << self
+    self.class.all << self if self.server.environment == ENVIRONMENT
   end
 
   def nginx_parser?
@@ -75,7 +77,7 @@ Sysops::Task::SshConfig::Host.class_eval do
       config['servers']["utility___#{h.identifier}"] = {
         'host'    => h.name,
         'command' => 'tail -F -n0',
-        'files'   => '/var/www/bloomfire/current/log/production.log',
+        'files'   => "/var/www/bloomfire/current/log/#{ENVIRONMENT}.log",
         'parser'  => 'utility',
         'color'   => '0.0, 1.0, 1.0, 10.0',
       }
@@ -97,7 +99,8 @@ end
 ###############################################################################################
 
 in_background do
-  Sysops::Task::SshConfig.write('production')
+  Sysops::Task::SshConfig.write(Sysops::AwsContext::ENVIRONMENTS)
+  Sysops::Task::SshConfig::Host.all.map(&:name)
 
   yaml_file = File.expand_path('../.bloomfire.yaml', __FILE__)
   File.write(yaml_file, Sysops::Task::SshConfig::Host.bubbles_config.to_yaml)
