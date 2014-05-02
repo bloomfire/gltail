@@ -102,7 +102,7 @@ config:
                 order: 1
                 size: 5
                 show: average
-            referrers:
+            hosts:
                 order: 2
                 size: 10
             user agents:
