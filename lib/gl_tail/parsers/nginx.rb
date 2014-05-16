@@ -7,10 +7,11 @@
 # Parser which handles nginx logs
 class NginxParser < Parser
   def parse( line )
-    _, remote_addr, remote_user, request, status, size, referrer, http_user_agent, http_x_forwarded_for, host = /^([^\s]+) - ([^\s]+) \[.*\] "([^\"]*)" (\d+) (\d+) \"([^\"]*)\" \"(.*)\" "(.*)\" (\w+)/.match(line).to_a
+    _, remote_addr, remote_user, request, status, size, referrer, http_user_agent, http_x_forwarded_for, host = /^([^\s]+) - ([^\s]+) \[.*\] "([^\"]*)" (\d+) (\d+) \"([^\"]*)\" \"(.*)\" "(.*)\" (\S+)/.match(line).to_a
     #_, remote_addr, remote_user, request, status, size, referrer, http_user_agent, http_x_forwarded_for = /^([^\s]+) - ([^\s]+) \[.*\] (\d+) \"(.+)\" (\d+) \"(.*)\" \"([^\"]*)\" \"(.*)\"/.match(line).to_a
 
     if request && request != '-'
+      host = referrer.sub(%r{^https*://([^/?]+).*}, '\1') if host =~ /^assets\d+\.bloomfire\.com$/ && referrer
       method, full_url, _ = request.split(' ')
       url, parameters = String(full_url).split('?')
       url ||= ''
