@@ -24,11 +24,11 @@ Sysops::Task::SshConfig::Host.class_eval do
   end
 
   def utility_parser?
-    server.role =~ /utility/
+    server.role == 'utility'
   end
 
   def uptime_parser?
-    %w[search web db-master utility-master utility-slave].include? server.role
+    %w[search web db-master db-slave utility analytics].include? server.role
   end
 
   def self.all
