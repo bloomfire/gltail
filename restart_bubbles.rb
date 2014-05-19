@@ -6,11 +6,6 @@ ENVIRONMENT = ENV['ENVIRONMENT'] || 'production'
 
 ###############################################################################################
 
-# Ruby 1.9's Net::HTTP doesn't have Net::OpenTimeout
-Net::OpenTimeout = Timeout::Error if RUBY_VERSION =~ /^1\.9/
-
-###############################################################################################
-
 Sysops::Task::SshConfig::Host.class_eval do
 
   alias :old_initialize :initialize
@@ -73,12 +68,7 @@ Sysops::Task::SshConfig::Host.class_eval do
 end
 ###############################################################################################
 
-  if RUBY_VERSION =~ /^1\.9/
-    # Weird threading issue when run in 1.9 that gets resolved when we run serially
-    Sysops::Task::SshConfig.write(ENVIRONMENT) # This means only the one environment will get written to ~/.ssh/config
-  else
-    Sysops::Task::SshConfig.write(Sysops::AwsContext::ENVIRONMENTS)
-  end
+  Sysops::Task::SshConfig.write(Sysops::AwsContext::ENVIRONMENTS)
   Sysops::Task::SshConfig::Host.all.map(&:name)
 
   yaml_file = File.expand_path('../.bloomfire.yaml', __FILE__)
