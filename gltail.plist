@@ -5,7 +5,7 @@
    <key>Label</key>
    <string>com.user.bubbles</string>
    <key>Program</key>
-   <string>/Users/bheeshmar/gltail/restart_bubbles.sh</string>
+   <string>/Users/bubbles/gltail/restart_bubbles.sh</string>
    <key>RunAtLoad</key>
    <true/>
    <key>StartCalendarInterval</key>
