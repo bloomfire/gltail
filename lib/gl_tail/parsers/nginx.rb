@@ -17,7 +17,7 @@ class NginxParser < Parser
       url ||= ''
 
       add_activity(:block => 'sites', :name => server.name, :size => size.to_i)
-      add_activity(:block => 'urls', :name => url) unless url =~ %r{^/uptime\.txt|^/ckeditor/|^/images/|^/assets/}
+      add_activity(:block => 'urls', :name => url) unless url =~ %r{^/uptime\.txt}
       #add_activity(:block => 'users', :name => remote_addr, :size => size.to_i)
       add_activity(:block => 'hosts', :name => host.sub('.bloomfire.com', '')) unless host.nil? || host == '-'
       #add_activity(:block => 'user agents', :name => http_user_agent, :type => 3) unless http_user_agent.nil?

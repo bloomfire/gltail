@@ -48,11 +48,13 @@ module GlTail
         # FIXME: add support for multiple files (eg. write files accessor)
         do_tail(files, command)
 
-        @session.process(0)
+        process
       end
 
       def process
         @session.process(0)
+      rescue EOFError => e
+        puts "Ignoring EOFError connecting to #{host}"
       end
 
       def update

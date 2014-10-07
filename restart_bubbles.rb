@@ -73,6 +73,6 @@ end
 
   yaml_file = File.expand_path('../.bloomfire.yaml', __FILE__)
   File.write(yaml_file, Sysops::Task::SshConfig::Host.bubbles_config.to_yaml)
-  exec File.expand_path('../bin/gl_tail', __FILE__), yaml_file
+  exec File.expand_path('../bin/gl_tail', __FILE__), '-q', yaml_file
 
 puts "Started bubbles!"
