@@ -70,28 +70,6 @@ module GlTail
 
       glEnd()
 
-      if @config.screen.bounce
-        left  = @left_right
-        right = @right_right
-        bottom = (-@config.screen.top)
-        middle = (-@config.screen.top) / 2.0
-        center = 0.1 
-
-        glColor([0.15, 0.15, 0.15, 1.0])
-        glEnable(GL_LINE_SMOOTH)
-        glBegin(GL_LINES)
-        glVertex3f(left, middle, 0.0)
-        glVertex3f(-center, bottom, 0.0)
-
-        glVertex3f(left, middle, 0.0)
-        glVertex3f(-center, bottom, 0.0)
-
-        glVertex3f(right, middle, 0.0)
-        glVertex3f(center, bottom, 0.0)
-        glEnd()
-        glDisable(GL_LINE_SMOOTH)
-      end 
-
       glPopMatrix()
 
       @config.blocks.each do |block|
@@ -235,7 +213,7 @@ module GlTail
 
       if @config.screen.bounce && $PHYSICS
         if @static_shapes && @static_shapes.size > 0 
-          0.upto(3) do |i|
+          0.upto(1) do |i|
             @space.remove_static_shape(@static_shapes[i])
           end 
           @static_shapes.clear
@@ -249,31 +227,14 @@ module GlTail
         middle = (-@config.screen.top) * @config.screen.window_height / 2.0
         center = 0.1 * @config.screen.window_width * @config.screen.aspect
 
-        shape = CP::Shape::Segment.new(@static_body, CP::Vec2.new(left,middle), CP::Vec2.new(-center,bottom), 3)
+        shape = CP::Shape::Segment.new(@static_body, CP::Vec2.new(left,0), CP::Vec2.new(left,-bottom), 3)
         shape.e = 0.9
         shape.u = 1
         @space.add_static_shape(shape)
         @static_shapes[0] = shape
       
-        shape = CP::Shape::Segment.new(@static_body, CP::Vec2.new(right,middle), CP::Vec2.new(center,bottom), 3)
-        shape.e = 0.9
-        shape.u = 1
-        @space.add_static_shape(shape)
-        @static_shapes[1] = shape
-        
-        shape = CP::Shape::Segment.new(@static_body, CP::Vec2.new(right,middle), CP::Vec2.new(right,-bottom), 3)
-        shape.e = 0.9
-        shape.u = 1
-        @space.add_static_shape(shape)
-        @static_shapes[2] = shape
-        
-        shape = CP::Shape::Segment.new(@static_body, CP::Vec2.new(left,middle), CP::Vec2.new(left,-bottom), 3)
-        shape.e = 0.9
-        shape.u = 1
-        @space.add_static_shape(shape)
-        @static_shapes[3] = shape
       elsif @static_shapes && @static_shapes.size > 0 
-        0.upto(3) do |i|
+        0.upto(1) do |i|
           @space.remove_static_shape(@static_shapes[i])
         end 
         @static_shapes.clear

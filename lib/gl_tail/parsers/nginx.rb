@@ -38,7 +38,7 @@ class NginxParser < Parser
         type = 'page'
       end
 
-      add_activity(:block => 'content', :name => type)
+      add_activity(:block => 'content', :name => type, :type => 3)
       add_activity(:block => 'status', :name => status, :type => 3)
 
       add_event(:block => 'info', :name => "Course Published", :message => "Course Published: #{host}", :update_stats => true, :color => [1.5, 1.0, 0.5, 1.0]) if method == "POST" && url.include?('/post')

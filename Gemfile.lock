@@ -1,9 +1,12 @@
 GIT
   remote: git@github.com:bloomfire/sysops.git
-  revision: aaaadfcb639986b207b4d99c5dd9aa5020f35ac2
+  revision: 162c0fff020b0a4e2f3d8f818f67665f1a7b15d2
   specs:
     sysops (1.0.2)
-      aws-sdk (= 1.32)
+      aws-sdk (~> 2.0)
+      aws-sdk-elb-tagging (= 1.58)
+      aws-sdk-v1 (= 1.58)
+      context_builder (~> 1.0)
       git (~> 1.2.6)
       httparty (~> 0.7)
       net-ssh (~> 2.2)
@@ -21,28 +24,38 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    aws-sdk (1.32.0)
+    aws-sdk (2.1.1)
+      aws-sdk-resources (= 2.1.1)
+    aws-sdk-core (2.1.1)
+      jmespath (~> 1.0)
+    aws-sdk-elb-tagging (1.58.0)
+      aws-sdk-v1 (~> 1.58)
+    aws-sdk-resources (2.1.1)
+      aws-sdk-core (= 2.1.1)
+    aws-sdk-v1 (1.58.0)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
-      uuidtools (~> 2.1)
     chipmunk (5.3.4.5)
+    context_builder (1.0.0)
     file-tail (1.0.12)
       tins (~> 0.5)
-    git (1.2.6)
-    httparty (0.13.1)
+    git (1.2.9.1)
+    httparty (0.13.5)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
-    json (1.8.1)
-    mini_portile (0.6.0)
+    jmespath (1.0.2)
+      multi_json (~> 1.0)
+    json (1.8.3)
+    mini_portile (0.6.2)
+    multi_json (1.11.1)
     multi_xml (0.5.5)
-    net-ssh (2.9.1)
+    net-ssh (2.9.2)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
-    nokogiri (1.6.2.1)
-      mini_portile (= 0.6.0)
+    nokogiri (1.6.6.2)
+      mini_portile (~> 0.6.0)
     opengl (0.8.0)
     tins (0.7.0)
-    uuidtools (2.1.4)
 
 PLATFORMS
   ruby

@@ -5,13 +5,14 @@ servers: {} # Loaded via AWS
 config:
     dimensions: 1200x700
     min_blob_size: 0.004
-    max_blob_size: 0.04
+    max_blob_size: 0.06
     highlight_color: orange
-    bounce: false
-    fullscreen: false
-    left_column:
-        size: 15
-        alignment: -0.99
+    #wanted_fps: 60
+    bounce: true
+    #fullscreen: true
+    right_column:
+        size: 35
+        alignment: 0.99
         blocks:
             hosts:
                 order: 1
@@ -19,11 +20,75 @@ config:
             sites:
                 order: 2
                 size: 10
+            urls:
+                order: 3
+                size: 15
+                color: 0.8, 0.4, 1.0, 1.0
+            slow requests:
+                order: 4
+                size: 5
+                show: average
+            hosts:
+                order: 5
+                size: 10
+                color: 1.0, 0.8, 0.4, 1.0
+            user agents:
+                order: 6
+                size: 5
+                color: 1.0, 1.0, 1.0, 1.0
+            mail from:
+                order: 7
+                size: 5
+            mail to:
+                order: 8
+                size: 5
+            viruses:
+                order: 9
+                size: 5
+            rejections:
+                order: 10
+                size: 5
+                color: 1.0, 0.2, 0.2, 1.0
+            warnings:
+                order: 11
+                size: 5
+                color: 1.0, 0.0, 0.0, 1.0
+            destinationinterface:
+                order: 12
+                size: 15
+            ipprotocol:
+                order: 13
+                size: 15
+            sourcedestination:
+                order: 14
+                size: 15
+            destinationhost:
+                order: 15
+                size: 15
+            destinationport:
+                order: 16
+                size: 15
+            agents:
+                order: 17
+                size: 8
+                show: total
+                auto_clean: false
+                color: 0.5, 0.5, 0.5, 0.5
+            freetrial:
+                order: 18
+                size: 10
+                show: total
+                auto_clean: false
+                color: 1.0, 1.0, 1.0, 0.5
+
+    left_column:
+        size: 15
+        alignment: -0.99
+        blocks:
             content:
                 order: 3
                 size: 5
                 show: total
-                color: 1.0, 0.8, 0.4, 1.0
             status:
                 order: 4
                 size: 10
@@ -90,69 +155,6 @@ config:
             sqlinsert:
               color: 1.0, 0.5, 0.5, 0.0
 
-
-    right_column:
-        size: 35
-        alignment: 0.99
-        blocks:
-            urls:
-                order: 0
-                size: 15
-            slow requests:
-                order: 1
-                size: 5
-                show: average
-            hosts:
-                order: 2
-                size: 10
-            user agents:
-                order: 3
-                size: 5
-                color: 1.0, 1.0, 1.0, 1.0
-            mail from:
-                order: 4
-                size: 5
-            mail to:
-                order: 5
-                size: 5
-            viruses:
-                order: 6
-                size: 5
-            rejections:
-                order: 7
-                size: 5
-                color: 1.0, 0.2, 0.2, 1.0
-            warnings:
-                order: 8
-                size: 5
-                color: 1.0, 0.0, 0.0, 1.0
-            destinationinterface:
-                order: 9
-                size: 15
-            ipprotocol:
-                order: 10
-                size: 15
-            sourcedestination:
-                order: 11
-                size: 15
-            destinationhost:
-                order: 11
-                size: 15
-            destinationport:
-                order: 12
-                size: 15
-            agents:
-                order: 14
-                size: 8
-                show: total
-                auto_clean: false
-                color: 0.5, 0.5, 0.5, 0.5
-            freetrial:
-                order: 15
-                size: 10
-                show: total
-                auto_clean: false
-                color: 1.0, 1.0, 1.0, 0.5
 
 resolver:
     reverse_ip_lookups: false

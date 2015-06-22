@@ -68,7 +68,7 @@ Sysops::Task::SshConfig::Host.class_eval do
 end
 ###############################################################################################
 
-  Sysops::Task::SshConfig.write(Sysops::AwsContext::ENVIRONMENTS)
+  Sysops::Task::SshConfig.write(Sysops.environments)
   Sysops::Task::SshConfig::Host.all.map(&:name)
 
   yaml_file = File.expand_path('../.bloomfire.yaml', __FILE__)
