@@ -9,7 +9,7 @@ config:
     highlight_color: orange
     #wanted_fps: 60
     bounce: true
-    #fullscreen: true
+    fullscreen: true
     right_column:
         size: 35
         alignment: 0.99

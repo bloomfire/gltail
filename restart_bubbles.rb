@@ -38,7 +38,7 @@ Sysops::Task::SshConfig::Host.class_eval do
         'host'    => h.name,
         'command' => 'tail -F -n0',
         'files'   => '/var/log/nginx/bloomfire.access.log',
-        'parser'  => 'nginx',
+        'parser'  => 'nginxjson',
         'color'   => '0.2, 1.0, 0.2, 1.0',
       }
     end
