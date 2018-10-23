@@ -40,9 +40,9 @@ class NginxJSONParser < Parser
       url ||= ''
 
       add_activity(:block => 'sites', :name => server.name, :size => size.to_i)
-      add_activity(:block => 'urls', :name => url) unless url =~ %r{^/uptime\.txt}
+      add_activity(:block => 'urls', :name => url) unless url =~ %r{^/uptime\.txt} || remote_addr =~ %r{10\.0\.}
       #add_activity(:block => 'users', :name => remote_addr, :size => size.to_i)
-      add_activity(:block => 'hosts', :name => host.sub('.bloomfire.com', '')) unless host.nil? || host == '-'
+      add_activity(:block => 'hosts', :name => host.sub('.bloomfire.com', '')) unless host.nil? || host == '-' || host =~ %r{10\.0\.}
       #add_activity(:block => 'user agents', :name => http_user_agent, :type => 3) unless http_user_agent.nil?
 
       if( url.include?('.gif') || url.include?('.jpg') || url.include?('.png') || url.include?('.ico'))

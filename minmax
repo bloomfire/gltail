@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ "$1" = "MIN" ]; then
+  xdotool windowminimize $(wmctrl -lp | grep 'bubbles *glTail' | awk '{print $1}')
+else
+  wmctrl -ia $(wmctrl -lp | grep 'bubbles *glTail' | awk '{print $1}')
+fi

@@ -6,7 +6,7 @@ ENVIRONMENT = ENV['ENVIRONMENT'] || 'production'
 
 ###############################################################################################
 
-Sysops::Task::SshConfig::Host.class_eval do
+Sysops::Task::VpnDns::Host.class_eval do
 
   alias :old_initialize :initialize
   def initialize(*args)
@@ -68,11 +68,11 @@ Sysops::Task::SshConfig::Host.class_eval do
 end
 ###############################################################################################
 
-  Sysops::Task::SshConfig.write(Sysops.environments)
-  Sysops::Task::SshConfig::Host.all.map(&:name)
+production = Sysops::GenericAwsContext.new(environment: 'production')
+Sysops::Task::VpnDns.new(production.servers).hosts
 
-  yaml_file = File.expand_path('../.bloomfire.yaml', __FILE__)
-  File.write(yaml_file, Sysops::Task::SshConfig::Host.bubbles_config.to_yaml)
-  exec File.expand_path('../bin/gl_tail', __FILE__), '-q', yaml_file
+yaml_file = File.expand_path('../.bloomfire.yaml', __FILE__)
+File.write(yaml_file, Sysops::Task::VpnDns::Host.bubbles_config.to_yaml)
+exec File.expand_path('../bin/gl_tail', __FILE__), '-q', yaml_file
 
 puts "Started bubbles!"

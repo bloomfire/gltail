@@ -5,3 +5,4 @@ vendor/Chipmunk-4.1.0/ruby/*.o
 .bloomfire.yaml
 nohup.out
 .pid
+*.log
