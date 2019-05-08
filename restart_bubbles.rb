@@ -1,78 +1,79 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
-require 'sysops'
+require 'net/http'
+require 'yaml'
 
 ENVIRONMENT = ENV['ENVIRONMENT'] || 'production'
 
 ###############################################################################################
 
-Sysops::Task::VpnDns::Host.class_eval do
+class Bubbles
 
-  def nginx_parser?
-    server.role == 'web'
+  attr_reader :hosts
+
+  def initialize
+    @hosts = Net::HTTP.get(URI 'https://s3.amazonaws.com/bloomfire-artifacts/.vpn-hosts').lines.map(&:strip)
+    add_nginxjson_servers
+    add_utility_servers
+    add_uptime_servers
   end
 
-  def utility_parser?
-    server.role == 'utility'
+  def start
+    yaml_file = File.expand_path('.bloomfire.yaml', __dir__)
+    File.write(yaml_file, config.to_yaml)
+    exec File.expand_path('bin/gl_tail', __dir__), '-q', yaml_file
+    puts "Started bubbles!"
   end
 
-  def uptime_parser?
-    %w[search web utility slackbot].include? server.role
+  private
+
+  def config
+    YAML.load_file(File.expand_path('bloomfire-config.yaml', __dir__)).merge('servers' => servers)
   end
 
-  def key
-    [identifier, index].compact.join('-')
+  def add_nginxjson_servers
+    hosts.grep(/^#{ENVIRONMENT}-web(-\d+)?$/).each do |host|
+      servers[name(host)] = {
+        'host'    => host,
+        'user'    => 'tail-bloomfire-nginx',
+        'parser'  => 'nginxjson',
+        'color'   => '0.2, 1.0, 0.2, 1.0',
+      }
+    end
   end
 
-end
-
-def servers
-  Sysops::GenericAwsContext.new(environment: ENVIRONMENT).servers
-end
-
-def hosts
-  @hosts ||= Sysops::Task::VpnDns.new(servers).hosts
-end
-
-def bubbles_config
-  config = YAML.load_file(File.expand_path('bloomfire-config.yaml', __dir__))
-
-  hosts.select(&:nginx_parser?).each do |h|
-    config['servers'][h.key] = {
-      'host'    => h.name,
-      'command' => 'tail -F -n0',
-      'files'   => '/var/log/nginx/bloomfire.access.log',
-      'parser'  => 'nginxjson',
-      'color'   => '0.2, 1.0, 0.2, 1.0',
-    }
+  def add_utility_servers
+    hosts.grep(/^#{ENVIRONMENT}-utility(-\d+)?$/).each do |host|
+      servers["utility___#{name(host)}"] = {
+        'host'    => host,
+        'user'    => 'tail-bloomfire-rails',
+        'parser'  => 'utility',
+        'color'   => '0.0, 1.0, 1.0, 10.0',
+      }
+    end
   end
 
-  hosts.select(&:utility_parser?).each do |h|
-    config['servers']["utility___#{h.key}"] = {
-      'host'    => h.name,
-      'command' => 'tail -F -n0',
-      'files'   => "/var/www/bloomfire/current/log/#{ENVIRONMENT}.log",
-      'parser'  => 'utility',
-      'color'   => '0.0, 1.0, 1.0, 10.0',
-    }
+  def add_uptime_servers
+    hosts.grep(/^#{ENVIRONMENT}-(web|utility|search|slackbot)(-\d+)?$/).each do |host|
+      servers["uptime___#{name(host)}"] = {
+        'host'    => host,
+        'user'    => 'tail-loadavg',
+        'parser'  => 'uptime',
+        'color'   => '1.0, 0.0, 0.0, 15.0',
+      }
+    end
   end
 
-  hosts.select(&:uptime_parser?).each do |h|
-    config['servers']["uptime___#{h.key}"] = {
-      'host'    => h.name,
-      'command' => "while [ 1 ]; do echo #{h.key} $(</proc/loadavg); sleep 5; done;",
-      'parser'  => 'uptime',
-      'color'   => '1.0, 0.0, 0.0, 15.0',
-    }
+  def name(host)
+    host.sub(/^#{ENVIRONMENT}-/, '')
   end
 
-  config
+  def servers
+    @servers ||= {}
+  end
+
 end
 
 ###############################################################################################
 
-yaml_file = File.expand_path('.bloomfire.yaml', __dir__)
-File.write(yaml_file, bubbles_config.to_yaml)
-exec File.expand_path('bin/gl_tail', __dir__), '-q', yaml_file
-
-puts "Started bubbles!"
+Bubbles.new.start
