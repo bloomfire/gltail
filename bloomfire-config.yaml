@@ -139,13 +139,17 @@ config:
                 order: 15
                 size: 8
                 show: instant
-            queues:
+            web queue:
                 order: 16
+                size: 4
+                show: instantd
+            utility queues:
+                order: 17
                 size: 8
                 show: instantd
             info:
-                order: 17
-                size: 15
+                order: 18
+                size: 8
                 auto_clean: false
                 show: total
             sqlselect:

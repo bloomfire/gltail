@@ -28,8 +28,7 @@ class UtilityParser < Parser
       bad = [1.0, 0.0, 0.0, 1.0]
       good = [0.0, 1.0, 0.0, 1.0]
       color = queue_size > 100 ? bad : good
-        add_activity(:block => 'queues', :name => queue_name, :size => queue_size, :color => color, :type => 3) # No blob 3
-        #puts "add_activity(:block => 'queues', :name => #{match[1]}, :size => #{match[2].to_i})"
+        add_activity(:block => 'utility queues', :name => queue_name, :size => queue_size, :color => color, :type => 3) # No blob 3
       end
     end
   end
