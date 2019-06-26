@@ -12,16 +12,17 @@ class UptimeParser < Parser
   GOOD = [0.0, 1.0, 0.0, 1.0]
 
   def parse( line )
-    server, queue_size, cpu_count, cpuload, _ = line.split(/\s+/, 5)
-    if server && queue_size && cpu_count && cpuload
-      server.sub!(/^production-/, '') # FIXME -- should support other environments
+    _ignored, queue_size, cpu_count, cpuload, _ = line.split(/\s+/, 5)
+    if queue_size && cpu_count && cpuload
+      host = server.host.sub!(/^production-/, '') # FIXME -- should support other environments
+
       unsafe_size = 20
       queue_size = queue_size.to_i
-      add_activity(:block => 'web queue', :name => server, :real_size => queue_size, :color => color(queue_size, unsafe_size), :type => 3) if server =~ /web/
+      add_activity(:block => 'web queue', :name => host, :real_size => queue_size, :color => color(queue_size, unsafe_size), :type => 3) if host =~ /web/
 
       unsafe_load = cpu_count.to_f * 0.75
       cpuload = cpuload.to_f
-      add_activity(:block => 'load', :name => server, :real_size => cpuload, :color => color(cpuload, unsafe_load), :type => 3) # 3=noblob?
+      add_activity(:block => 'load', :name => host, :real_size => cpuload, :color => color(cpuload, unsafe_load), :type => 3) # 3=noblob?
     end
   end
 
