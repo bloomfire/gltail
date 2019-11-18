@@ -54,7 +54,7 @@ class Bubbles
   end
 
   def add_uptime_servers
-    hosts.grep(/^#{ENVIRONMENT}-(web|utility|search|slackbot)(-\d+)?$/).each do |host|
+    hosts.grep(/^#{ENVIRONMENT}-(web|utility|search|bot)(-\d+)?$/).each do |host|
       servers["uptime___#{name(host)}"] = {
         'host'    => host,
         'user'    => 'tail-loadavg',
