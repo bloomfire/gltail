@@ -1,0 +1,11 @@
+[Unit]
+Description=Datadog Dashboard
+After=sshd.target
+
+[Service]
+Type=simple
+User=bubbles
+Group=bubbles
+Environment=DISPLAY=:0
+ExecStart=/bin/bash -l -c 'wmctrl -s 2 && google-chrome --start-fullscreen --restore-last-session --no-referrers --app="https://app.datadoghq.com/dashboard/jaz-jfu-2p6/system-triage-board?live=true&tile_size=l"'
+Restart=always

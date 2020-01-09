@@ -1,0 +1,12 @@
+[Unit]
+Description=Bubbles!
+After=sshd.target
+
+[Service]
+Type=simple
+User=bubbles
+Group=bubbles
+WorkingDirectory=/home/bubbles/gltail
+Environment=DISPLAY=:0
+ExecStart=/bin/bash -l -c 'wmctrl -s 1 && /home/bubbles/gltail/restart_bubbles.rb'
+Restart=always

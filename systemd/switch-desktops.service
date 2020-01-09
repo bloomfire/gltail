@@ -1,0 +1,11 @@
+[Unit]
+Description=Desktop Switcher
+After=sshd.target
+
+[Service]
+Type=simple
+User=bubbles
+Group=bubbles
+Environment=DISPLAY=:0
+ExecStart=/bin/bash -l -c '/home/bubbles/switch-desktops.sh'
+Restart=always
